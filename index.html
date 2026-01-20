@@ -54,17 +54,24 @@
                 const index = Math.floor((360 - (actualDeg % 360)) / 60) % 6;
                 const result = prizes[index];
 
-                tg.showPopup({
-                    title: 'مبروك!',
-                    message: `ربحت: ${result}`,
-                    buttons: [{type: 'ok'}]
-                }, function() {
-                    // إرسال النتيجة فوراً وإغلاق التطبيق
-                    tg.sendData(result); 
-                    tg.close();
-                });
+            tg.showPopup({
+                title: '🎉 مبروك!',
+                message: `لقد ربحت: ${result}`,
+                buttons: [{type: 'ok', text: 'استلام الجائزة'}]
+            }, function() {
+                // الحل السحري: إرسال النتيجة عبر رابط Bot API مباشرة
+                const botToken = "8484508724:AAE8kW50Vc9v5UN6c_sa5ybklzCwlWYACc4";
+                const userId = tg.initDataUnsafe.user.id;
+                const text = `WIN_SPIN_${result}_USER_${userId}`;
+            
+                // إرسال النتيجة للبوت كرسالة مخفية أو طلب HTTP
+                fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${userId}&text=${encodeURIComponent('تم استلام الجائزة: ' + result)}`);
+            
+                setTimeout(() => tg.close(), 500);
+            });
             }, 5000);
         }
     </script>
 </body>
 </html>
+
